@@ -19,9 +19,14 @@
     </modules>
 
     <properties>
+        <!--region Java Properties -->
+        <java.version>13</java.version>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>13</maven.compiler.source>
-        <maven.compiler.target>13</maven.compiler.target>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!--endregion-->
         <com.google.guava.version>28.1-jre</com.google.guava.version>
         <org.apache.maven.plugins.assebly.version>3.1.1</org.apache.maven.plugins.assebly.version>
     </properties>
