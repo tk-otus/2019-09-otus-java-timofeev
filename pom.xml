@@ -16,6 +16,7 @@
 
     <modules>
         <module>hw01-maven</module>
+        <module>hw2-generics-collections</module>
     </modules>
 
     <properties>

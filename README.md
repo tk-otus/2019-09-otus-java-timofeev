@@ -5,3 +5,4 @@
 
 ### Домашние задачи
 1. [Homework #1: Подготовка к курсу](hw01-maven)
+1. [Homework #2: Контейнеры и алгоритмы](hw2-generics-collections)
