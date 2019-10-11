@@ -1,7 +1,5 @@
 package ru.nspk.osks;
 
-import org.w3c.dom.ls.LSOutput;
-
 import java.util.*;
 
 public class DIYArrayList<T> implements List<T> {
@@ -47,7 +45,7 @@ public class DIYArrayList<T> implements List<T> {
         return size;
     }
 
-    T elementData(int index) {
+    private T elementData(int index) {
         return (T) elementData[index];
     }
 

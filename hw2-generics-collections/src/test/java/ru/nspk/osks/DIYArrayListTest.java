@@ -60,6 +60,7 @@ public class DIYArrayListTest {
         DIYArrayList<Integer> arr2 = new DIYArrayList<>(arr1.size());
         Collections.copy(arr2, arr1);
         assertEquals(30, arr2.size());
+        assertArrayEquals(arr1.toArray(), arr2.toArray());
     }
 
     @Test
