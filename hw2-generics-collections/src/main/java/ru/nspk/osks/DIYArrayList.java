@@ -3,6 +3,17 @@ package ru.nspk.osks;
 import java.util.*;
 
 public class DIYArrayList<T> implements List<T> {
+    public static void main(String[] args) {
+        List<Integer> a = new DIYArrayList<>();
+        a.add(1);
+        a.add(null);
+
+        System.out.println(a.contains(null));
+
+        for(int i = 0; i < a.size(); i++) {
+            System.out.println(a.get(i));
+        }
+    }
     /**
      * Общий пустой экземпляр массива, используемый для пустых экземпляров.
      */
@@ -57,7 +68,13 @@ public class DIYArrayList<T> implements List<T> {
 
     @Override
     public boolean contains(Object o) {
-        if (!isEmpty()) {
+        if (o == null) {
+            for (Object e : elementData) {
+                if (e == null) {
+                    return true;
+                }
+            }
+        } else {
             for (Object e : elementData) {
                 if (o.equals(e)) {
                     return true;

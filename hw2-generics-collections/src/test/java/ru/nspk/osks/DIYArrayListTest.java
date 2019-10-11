@@ -86,4 +86,11 @@ public class DIYArrayListTest {
         arr.add(1);
         iterator.next();
     }
+
+    @Test
+    public void testContainsNull() {
+        List<String> arr = new DIYArrayList<>();
+        arr.add(null);
+        assertTrue(arr.contains(null));
+    }
 }
