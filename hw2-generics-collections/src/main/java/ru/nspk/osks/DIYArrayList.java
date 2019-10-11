@@ -194,7 +194,7 @@ public class DIYArrayList<T> implements List<T> {
     }
 
     private Object[] grow() {
-        return elementData = Arrays.copyOf(elementData, size + 1);
+        return Arrays.copyOf(elementData, size + 1);
     }
 
     private class Iterator<E> implements java.util.Iterator<E> {
