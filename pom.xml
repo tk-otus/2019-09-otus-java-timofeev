@@ -29,6 +29,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!--endregion-->
         <com.google.guava.version>28.1-jre</com.google.guava.version>
+        <com.google.junit.version>4.12</com.google.junit.version>
         <org.apache.maven.plugins.assebly.version>3.1.1</org.apache.maven.plugins.assebly.version>
     </properties>
 
@@ -38,6 +39,12 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${com.google.guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${com.google.junit.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

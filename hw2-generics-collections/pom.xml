@@ -6,6 +6,13 @@
 
     <name>HW2: Generics and Collections</name>
     <description>Homework #2: Контейнеры и алгоритмы</description>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <parent>
         <groupId>ru.nspk.osks</groupId>
