@@ -17,7 +17,8 @@ public class DIYArrayList<T> implements List<T> {
     /**
      * Размен DIYArrayList (количество элементов которые он содержит).
      */
-    private int size = 0;
+    private int size;
+    protected int modCount;
 
 
     public DIYArrayList() {
@@ -82,7 +83,7 @@ public class DIYArrayList<T> implements List<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return (ListIterator<T>) Arrays.asList(elementData).listIterator();
+        return new Iterator<>();
     }
 
     @Override
@@ -97,6 +98,7 @@ public class DIYArrayList<T> implements List<T> {
 
     @Override
     public boolean add(T o) {
+        modCount++;
         if (size == elementData.length) {
             elementData = grow();
         }
@@ -106,7 +108,6 @@ public class DIYArrayList<T> implements List<T> {
 
     @Override
     public boolean remove(Object o) {
-
         throw new UnsupportedOperationException();
     }
 
@@ -177,5 +178,34 @@ public class DIYArrayList<T> implements List<T> {
 
     private Object[] grow() {
         return elementData = Arrays.copyOf(elementData, size + 1);
+    }
+
+    private class Iterator<E> implements java.util.Iterator<E> {
+        int cursor;
+        int lastRet = -1;
+        int expectedModCount = modCount;
+
+        @Override
+        public boolean hasNext() {
+            return cursor != size;
+        }
+
+        @Override
+        public E next() {
+            checkForModification();
+            int c = cursor;
+            if (c >= size) {
+                throw new NoSuchElementException();
+            }
+            lastRet = cursor;
+            cursor++;
+            return (E) elementData[c];
+        }
+
+        final void checkForModification() {
+            if (expectedModCount != modCount) {
+                throw new ConcurrentModificationException();
+            }
+        }
     }
 }

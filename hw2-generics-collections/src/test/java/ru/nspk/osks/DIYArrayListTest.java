@@ -70,6 +70,20 @@ public class DIYArrayListTest {
         Collections.copy(arr2, arr1);
         Collections.sort(arr1);
         Collections.sort(arr2);
-        assertEquals(arr1, arr2);
+        assertArrayEquals(arr1.toArray(), arr2.toArray());
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testIteratorNoSuchElementException() {
+        java.util.Iterator iterator = new DIYArrayList<>().iterator();
+        iterator.next();
+    }
+
+    @Test(expected = ConcurrentModificationException.class)
+    public void testIteratorConcurrentModificationException() {
+        List<Integer> arr = new DIYArrayList<>();
+        java.util.Iterator iterator = arr.iterator();
+        arr.add(1);
+        iterator.next();
     }
 }
