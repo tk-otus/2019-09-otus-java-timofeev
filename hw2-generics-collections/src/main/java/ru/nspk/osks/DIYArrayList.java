@@ -3,17 +3,6 @@ package ru.nspk.osks;
 import java.util.*;
 
 public class DIYArrayList<T> implements List<T> {
-    public static void main(String[] args) {
-        List<Integer> a = new DIYArrayList<>();
-        a.add(1);
-        a.add(null);
-
-        System.out.println(a.contains(null));
-
-        for(int i = 0; i < a.size(); i++) {
-            System.out.println(a.get(i));
-        }
-    }
     /**
      * Общий пустой экземпляр массива, используемый для пустых экземпляров.
      */
@@ -44,6 +33,15 @@ public class DIYArrayList<T> implements List<T> {
         elementData = new Object[initialCapacity];
     }
 
+    @Override
+    public boolean add(T o) {
+        modCount++;
+        if (size == elementData.length) {
+            elementData = grow();
+        }
+        elementData[size++] = o;
+        return true;
+    }
 
     /**
      * Возвращает количество элементов в списке. Если список содержит
@@ -104,94 +102,73 @@ public class DIYArrayList<T> implements List<T> {
     }
 
     @Override
+    public ListIterator<T> listIterator() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Object[] toArray() {
         return Arrays.copyOf(elementData, size);
     }
 
+    // region Unsupported Operations
     @Override
     public Object[] toArray(Object[] a) {
         throw new UnsupportedOperationException();
     }
-
-    @Override
-    public boolean add(T o) {
-        modCount++;
-        if (size == elementData.length) {
-            elementData = grow();
-        }
-        elementData[size++] = o;
-        return true;
-    }
-
     @Override
     public boolean remove(Object o) {
         throw new UnsupportedOperationException();
     }
-
     @Override
     public boolean containsAll(Collection c) {
         throw new UnsupportedOperationException();
     }
-
     @Override
     public boolean addAll(Collection c) {
         throw new UnsupportedOperationException();
     }
-
     @Override
     public boolean addAll(int index, Collection c) {
         throw new UnsupportedOperationException();
     }
-
     @Override
     public boolean removeAll(Collection c) {
         throw new UnsupportedOperationException();
     }
-
     @Override
     public boolean retainAll(Collection c) {
         throw new UnsupportedOperationException();
     }
-
     @Override
     public void clear() {
         throw new UnsupportedOperationException();
     }
-
     @Override
     public void add(int index, Object element) {
         throw new UnsupportedOperationException();
     }
-
     @Override
     public T remove(int index) {
         throw new UnsupportedOperationException();
     }
-
     @Override
     public int indexOf(Object o) {
         throw new UnsupportedOperationException();
     }
-
     @Override
     public int lastIndexOf(Object o) {
         throw new UnsupportedOperationException();
     }
-
-    @Override
-    public ListIterator<T> listIterator() {
-        return (ListIterator<T>) Arrays.asList(elementData).listIterator();
-    }
-
     @Override
     public ListIterator<T> listIterator(int index) {
         throw new UnsupportedOperationException();
     }
-
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
         throw new UnsupportedOperationException();
     }
+    // endregion
 
     private Object[] grow() {
         return Arrays.copyOf(elementData, size + 1);
