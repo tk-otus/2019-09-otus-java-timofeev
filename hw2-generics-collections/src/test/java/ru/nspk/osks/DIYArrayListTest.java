@@ -65,10 +65,8 @@ public class DIYArrayListTest {
 
     @Test
     public void testCollectionsSort() {
-        List<Integer> arr1 = new ArrayList<>(Arrays.asList(7, 4, 1, 8));
-        DIYArrayList<Integer> arr2 = new DIYArrayList<>(arr1.size());
-        Collections.copy(arr2, arr1);
-        Collections.sort(arr1);
+        List<Integer> arr1 = new ArrayList<>(Arrays.asList(1, 4, 7, 8));
+        DIYArrayList<Integer> arr2 = new DIYArrayList<>(Arrays.asList(7, 4, 1, 8));
         Collections.sort(arr2);
         assertArrayEquals(arr1.toArray(), arr2.toArray());
     }

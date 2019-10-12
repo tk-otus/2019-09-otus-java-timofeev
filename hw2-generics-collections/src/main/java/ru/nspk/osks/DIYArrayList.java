@@ -34,6 +34,17 @@ public class DIYArrayList<T> implements List<T> {
         elementData = new Object[initialCapacity];
     }
 
+    public DIYArrayList(Collection<? extends T> t) {
+        elementData = t.toArray();
+        size = elementData.length;
+        if (size != 0) {
+            if (elementData.getClass() != Object[].class)
+                elementData = Arrays.copyOf(elementData, size, Object[].class);
+        } else {
+            this.elementData = EMPTY_ELEMENTDATA;
+        }
+    }
+
     @Override
     public boolean add(T o) {
         modCount++;
