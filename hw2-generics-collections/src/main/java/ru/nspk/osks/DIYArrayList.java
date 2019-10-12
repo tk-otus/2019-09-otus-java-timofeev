@@ -1,6 +1,7 @@
 package ru.nspk.osks;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class DIYArrayList<T> implements List<T> {
     /**
@@ -103,7 +104,7 @@ public class DIYArrayList<T> implements List<T> {
 
     @Override
     public ListIterator<T> listIterator() {
-        throw new UnsupportedOperationException();
+        return new ListIterator<>(0);
     }
 
     @Override
@@ -201,5 +202,64 @@ public class DIYArrayList<T> implements List<T> {
                 throw new ConcurrentModificationException();
             }
         }
+    }
+
+    private class ListIterator<E> extends Iterator<E> implements java.util.ListIterator<E> {
+
+        ListIterator(int index) {
+            super();
+            cursor = index;
+        }
+
+        @Override
+        public void set(E e) {
+            if (lastRet < 0)
+                throw new IllegalStateException();
+            checkForModification();
+
+            try {
+                DIYArrayList.this.set(lastRet, (T) e);
+                expectedModCount = modCount;
+            } catch (IndexOutOfBoundsException ex) {
+                throw new ConcurrentModificationException();
+            }
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return cursor != 0;
+        }
+
+        // region Unsupported Operations
+        @Override
+        public E previous() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public int nextIndex() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public int previousIndex() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void forEachRemaining(Consumer action) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void add(E e) {
+            throw new UnsupportedOperationException();
+        }
+        // endregion
     }
 }
