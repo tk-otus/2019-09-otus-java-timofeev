@@ -1,10 +1,10 @@
 package ru.nspk.osks;
 
-import org.junit.Test;
-
 import java.util.*;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DIYArrayListTest {
 
@@ -71,18 +71,18 @@ public class DIYArrayListTest {
         assertArrayEquals(arr1.toArray(), arr2.toArray());
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void testIteratorNoSuchElementException() {
         java.util.Iterator iterator = new DIYArrayList<>().iterator();
-        iterator.next();
+        assertThrows(NoSuchElementException.class, iterator::next);
     }
 
-    @Test(expected = ConcurrentModificationException.class)
+    @Test
     public void testIteratorConcurrentModificationException() {
         List<Integer> arr = new DIYArrayList<>();
         java.util.Iterator iterator = arr.iterator();
         arr.add(1);
-        iterator.next();
+        assertThrows(ConcurrentModificationException.class, iterator::next);
     }
 
     @Test
