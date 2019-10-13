@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class DIYArrayList<T> implements List<T> {
+    private static final int DEFAULT_CAPACITY = 10;
     /**
      * Общий пустой экземпляр массива, используемый для пустых экземпляров.
      */
@@ -49,7 +50,7 @@ public class DIYArrayList<T> implements List<T> {
     public boolean add(T o) {
         modCount++;
         if (size == elementData.length) {
-            elementData = grow();
+            grow();
         }
         elementData[size++] = o;
         return true;
@@ -128,62 +129,79 @@ public class DIYArrayList<T> implements List<T> {
     public Object[] toArray(Object[] a) {
         throw new UnsupportedOperationException();
     }
+
     @Override
     public boolean remove(Object o) {
         throw new UnsupportedOperationException();
     }
+
     @Override
     public boolean containsAll(Collection c) {
         throw new UnsupportedOperationException();
     }
+
     @Override
     public boolean addAll(Collection c) {
         throw new UnsupportedOperationException();
     }
+
     @Override
     public boolean addAll(int index, Collection c) {
         throw new UnsupportedOperationException();
     }
+
     @Override
     public boolean removeAll(Collection c) {
         throw new UnsupportedOperationException();
     }
+
     @Override
     public boolean retainAll(Collection c) {
         throw new UnsupportedOperationException();
     }
+
     @Override
     public void clear() {
         throw new UnsupportedOperationException();
     }
+
     @Override
     public void add(int index, Object element) {
         throw new UnsupportedOperationException();
     }
+
     @Override
     public T remove(int index) {
         throw new UnsupportedOperationException();
     }
+
     @Override
     public int indexOf(Object o) {
         throw new UnsupportedOperationException();
     }
+
     @Override
     public int lastIndexOf(Object o) {
         throw new UnsupportedOperationException();
     }
+
     @Override
     public ListIterator<T> listIterator(int index) {
         throw new UnsupportedOperationException();
     }
+
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
         throw new UnsupportedOperationException();
     }
     // endregion
 
-    private Object[] grow() {
-        return Arrays.copyOf(elementData, size + 1);
+    private void grow() {
+        if (size == 0 || elementData == EMPTY_ELEMENTDATA) {
+            elementData = new Object[DEFAULT_CAPACITY];
+        } else {
+            elementData = Arrays.copyOf(elementData, size * 2);
+        }
     }
 
     private class Iterator<E> implements java.util.Iterator<E> {
