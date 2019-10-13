@@ -16,6 +16,7 @@
 
     <modules>
         <module>hw01-maven</module>
+        <module>hw2-generics-collections</module>
     </modules>
 
     <properties>
@@ -28,6 +29,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!--endregion-->
         <com.google.guava.version>28.1-jre</com.google.guava.version>
+        <org.junit.jupiter.version>5.5.2</org.junit.jupiter.version>
         <org.apache.maven.plugins.assebly.version>3.1.1</org.apache.maven.plugins.assebly.version>
     </properties>
 
@@ -37,6 +39,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${com.google.guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${org.junit.jupiter.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
