@@ -34,7 +34,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ru.nspk.osks.</mainClass>
+                            <mainClass>ru.nspk.osks.DIYArrayList</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
