@@ -27,7 +27,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ru.nspk.osks.</mainClass>
+                            <mainClass>ru.nspk.osks.GC</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
