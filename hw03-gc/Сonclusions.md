@@ -2124,12 +2124,16 @@
 <table>
     <tr>
         <th>Сборщик</th>
+        <th>Время работы</th>
+        <th>Объектов в массиве</th>
         <th>Тип сборки</th>
         <th>Количество</th>
         <th>Суммарное время сборки</th>
     </tr>
     <tr>
-        <td rowspan=2>Serial GC</td>
+        <td rowspan=2>Serial</td>
+        <td rowspan=2>286 сек.</td>
+        <td rowspan=2>984 500 шт.</td>
         <td>Young</td>
         <td>6</td>
         <td>57 ms (0,057 s)</td>
@@ -2140,7 +2144,9 @@
         <td>515 ms (0,515 s)</td>
     </tr>
     <tr>
-        <td rowspan=2>Parallel GC</td>
+        <td rowspan=2>Parallel</td>
+        <td rowspan=2>291 сек.</td>
+        <td rowspan=2>984 500 шт.</td>
         <td>Young</td>
         <td>4</td>
         <td>68 ms (0,068 s)</td>
@@ -2151,7 +2157,9 @@
         <td>859 ms (0,859 s)</td>
     </tr>
     <tr>
-        <td rowspan=2>ConcurrentMarkSweep GC</td>
+        <td rowspan=2>CMS</td>
+        <td rowspan=2>306 сек.</td>
+        <td rowspan=2>984 500 шт.</td>
         <td>Young</td>
         <td>16</td>
         <td>155 ms (0,155 s)</td>
@@ -2162,7 +2170,9 @@
         <td>53328 ms (53,328 s)</td>
     </tr>
     <tr>
-        <td rowspan=2>G1 GC</td>
+        <td rowspan=2>G1</td>
+        <td rowspan=2>288 сек.</td>
+        <td rowspan=2>979 000 шт.</td>
         <td>Young</td>
         <td>65</td>
         <td>526 ms (0,526 s)</td>
