@@ -2139,4 +2139,37 @@
         <td>9</td>
         <td>515 ms (0,515 s)</td>
     </tr>
+    <tr>
+        <td rowspan=2>Parallel GC</td>
+        <td>Young</td>
+        <td>4</td>
+        <td>68 ms (0,068 s)</td>
+    </tr>
+    <tr>
+        <td>Old</td>
+        <td>14</td>
+        <td>859 ms (0,859 s)</td>
+    </tr>
+    <tr>
+        <td rowspan=2>ConcurrentMarkSweep GC</td>
+        <td>Young</td>
+        <td>16</td>
+        <td>155 ms (0,155 s)</td>
+    </tr>
+    <tr>
+        <td>Old</td>
+        <td>107</td>
+        <td>53328 ms (53,328 s)</td>
+    </tr>
+    <tr>
+        <td rowspan=2>G1 GC</td>
+        <td>Young</td>
+        <td>65</td>
+        <td>526 ms (0,526 s)</td>
+    </tr>
+    <tr>
+        <td>Old</td>
+        <td>20</td>
+        <td>918 ms (0,918 s)</td>
+    </tr>
 </table>​
