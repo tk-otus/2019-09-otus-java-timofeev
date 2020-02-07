@@ -13,16 +13,15 @@ public class Benchmark implements BenchmarkMBean {
     }
 
     void run() throws InterruptedException {
-        ArrayList<String> arr = new ArrayList(size);
+        ArrayList<Integer> arr = new ArrayList(size);
         for (int i = 0; i < loopCounter; i++) {
             for (int c = 0; c < size; c++) {
-                arr.add(new String(new char[0]));
+                arr.add(1);
             }
-            for (int c = 0; c < size / 2; c++) {
-                arr.remove(c);
-            }
+//            for (int c = 0; c < size / 2; c++) {
+//                arr.remove(c);
+//            }
             arraySize = arr.size();
-            Thread.sleep(100);
         }
     }
 
