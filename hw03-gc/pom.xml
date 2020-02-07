@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>HW3: Garbage Collectors</name>
-    <description>Homework #3: Сборщики мутора</description>
+    <description>Homework #3: Сборщики мусора</description>
 
     <parent>
         <groupId>ru.nspk.osks</groupId>
