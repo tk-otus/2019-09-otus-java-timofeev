@@ -27,7 +27,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ru.nspk.osks.LoggingAnnotation</mainClass>
+                            <mainClass>ru.nspk.osks.DemoProxy</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
