@@ -19,7 +19,7 @@
 
 Метод класса можно пометить самодельной аннотацией `@Log`, например, так:
 
-```
+```java
 class TestLogging {
     @Log
     public void calculation(int param) {};
@@ -29,7 +29,7 @@ class TestLogging {
 При вызове этого метода "автомагически" в консоль должны логироваться значения параметров.
 Например так.
 
-```
+```java
 class Demo {
     public void action() {
         new TestLogging().calculation(6);
