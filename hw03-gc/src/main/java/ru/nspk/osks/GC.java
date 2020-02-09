@@ -1,7 +1,7 @@
 package ru.nspk.osks;
 
-import com.sun.management.GarbageCollectionNotificationInfo;
 
+import com.sun.management.GarbageCollectionNotificationInfo;
 import javax.management.MBeanServer;
 import javax.management.NotificationEmitter;
 import javax.management.NotificationListener;
