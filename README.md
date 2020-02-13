@@ -7,4 +7,5 @@
 1. [Homework #1: Подготовка к курсу](hw01-maven)
 1. [Homework #2: Контейнеры и алгоритмы](hw02-generics-collections)
 1. [Homework #3: Сборщики мусора](hw03-gc)
+1. [Homework #4: Автоматическое логирование](hw4-automatic-logging)
 1. [Homework #5: Аннотации](hw05-testing-framework)
