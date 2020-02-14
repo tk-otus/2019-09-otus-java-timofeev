@@ -15,6 +15,12 @@ public class MyTestFrameworkTest {
         file.createNewFile();
     }
 
+//    @Before
+//    public void beforeWithException() {
+//        System.out.println("Running @Before with exception");
+//        throw new RuntimeException();
+//    }
+
     @Test
     public void testFileExist() throws FileNotFoundException {
         if (!file.exists()) {
@@ -53,4 +59,10 @@ public class MyTestFrameworkTest {
     public void deleteFile() {
         file.delete();
     }
+
+//    @After
+//    public void afterWithException() {
+//        System.out.println("Running @After with exception");
+//        throw new RuntimeException();
+//    }
 }

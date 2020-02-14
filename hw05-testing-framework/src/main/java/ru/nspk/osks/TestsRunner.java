@@ -7,6 +7,7 @@ import ru.nspk.osks.testing.Test;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TestsRunner {
@@ -33,27 +34,15 @@ public class TestsRunner {
 
     public void run() {
         for (Method testMethod : testMethods) {
+            boolean testPassed;
             printTestMethodInfo(testMethod);
             try {
                 Object classInstance = klass.getDeclaredConstructor().newInstance();
 
-                // Выполняем методы с аннотацией Before
-                for (Method beforeMethod : beforeMethods) {
-                    beforeMethod.invoke(classInstance);
-                }
+                testPassed = invokeMethods(beforeMethods, classInstance) && invokeMethod(testMethod, classInstance);
+                testPassed = invokeMethods(afterMethods, classInstance) && testPassed;
+                succeedTests = testPassed ? ++succeedTests : succeedTests;
 
-                // Выполняем метод самого теста
-                try {
-                    testMethod.invoke(classInstance);
-                    succeedTests += 1;
-                } catch (Exception e) {
-                    e.printStackTrace(System.out);
-                }
-
-                // Выполняем методы с аннотацией After
-                for (Method afterMethod : afterMethods) {
-                    afterMethod.invoke(classInstance);
-                }
             } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
                 e.printStackTrace();
             }
@@ -72,5 +61,23 @@ public class TestsRunner {
         System.out.println("Total tests: " + testMethods.size());
         System.out.println("Passed: " + succeedTests);
         System.out.println("Failed: " + (testMethods.size() - succeedTests));
+    }
+
+
+    private boolean invokeMethods(List<Method> methods, Object classInstance) {
+        boolean result = true;
+        for (Method method : methods) {
+            try {
+                method.invoke(classInstance);
+            } catch (Exception e) {
+                e.printStackTrace(System.out);
+                result = false;
+            }
+        }
+        return result;
+    }
+
+    private boolean invokeMethod(Method method, Object classInstance) {
+        return invokeMethods(Collections.singletonList(method), classInstance);
     }
 }
