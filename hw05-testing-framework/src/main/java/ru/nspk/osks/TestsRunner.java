@@ -7,12 +7,13 @@ import ru.nspk.osks.testing.Test;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TestsRunner {
     private final Class<?> klass;
-    private ArrayList<Method> beforeMethods = new ArrayList<>();
-    private ArrayList<Method> testMethods = new ArrayList<>();
-    private ArrayList<Method> afterMethods = new ArrayList<>();
+    private final List<Method> beforeMethods = new ArrayList<>();
+    private final List<Method> testMethods = new ArrayList<>();
+    private final List<Method> afterMethods = new ArrayList<>();
 
     private int succeedTests = 0;
 
