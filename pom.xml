@@ -19,6 +19,7 @@
         <module>hw02-generics-collections</module>
         <module>hw03-gc</module>
         <module>hw04-automatic-logging</module>
+        <module>hw05-testing-framework</module>
     </modules>
 
     <properties>
