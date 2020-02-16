@@ -8,47 +8,49 @@ public class ATM {
     private final String bankName;
     private final String atmSN;
     private final String supportContacts;
-    private final int[] faceValuesList;
-    private final FaceValue[] faceValues;
 
-    public ATM(String bankName, String atmSN, String supportContacts, FaceValue[] faceValues) {
+    private final int[] faceValuesList;
+    private final Cassette[] cassettes;
+
+    public ATM(String bankName, String atmSN, String supportContacts, Cassette[] cassettes) {
         this.bankName = bankName;
         this.atmSN = atmSN;
         this.supportContacts = supportContacts;
 
-        if (faceValues.length > MAX_FACE_VALUES) {
-            throw new IndexOutOfBoundsException();
+        if (cassettes.length > MAX_FACE_VALUES) {
+            throw new IllegalArgumentException("Банкомат не поддерживает больше " + MAX_FACE_VALUES + " ячеек для купюр");
         }
 
-        Arrays.sort(faceValues);
-        this.faceValues = faceValues;
+        Arrays.sort(cassettes);
+        this.cassettes = cassettes;
 
-        int[] fvl = new int[faceValues.length];
-        for (int i = 0; i < faceValues.length; i++) {
-            fvl[i] = faceValues[i].getFaceValue();
+        int[] fvl = new int[cassettes.length];
+        for (int i = 0; i < cassettes.length; i++) {
+            fvl[i] = cassettes[i].getFaceValue();
         }
         faceValuesList = fvl;
-
-//        printWelcomeMessage();
     }
 
-    public void putCash(int faceValue, int count) {
-        FaceValue faceValueObj = null;
-        for (FaceValue fv : faceValues) {
-            if (fv.getFaceValue() == faceValue) {
-                faceValueObj = fv;
+    public void putCash(int fv, int count) {
+        if (count <= 0) {
+            throw new IllegalArgumentException("Нельзя использовать нулевое или отрицаиельное число");
+        }
+        Cassette cassette = null;
+        for (Cassette c : cassettes) {
+            if (c.getFaceValue() == fv) {
+                cassette = c;
                 break;
             }
         }
-        if (faceValueObj == null) {
-            throw new IllegalStateException("Не удалось найти указанный номинал");
+        if (cassette == null) {
+            throw new IllegalArgumentException("Банкомат не принимает купюры данного номинала");
         }
-        faceValueObj.putCash(count);
+        cassette.putCash(count);
     }
 
     public void getCash(int sum) {
         if (sum <= 0) {
-            throw new IllegalStateException("Нельзя использовать нулевое или отрицаиельное число");
+            throw new IllegalArgumentException("Нельзя использовать нулевое или отрицаиельное число");
         }
         System.out.println("Вы запросили " + sum + " руб. к выдаче");
         if (sum % faceValuesList[0] != 0) {
@@ -68,7 +70,7 @@ public class ATM {
 
             int diff = sumLeft - mod;
             int banknotesNeeded = diff / faceValue;
-            int banknotesInStock = faceValues[i].getBanknotesNumber();
+            int banknotesInStock = cassettes[i].getBanknotesCount();
 
             banknotes[i] = Math.min(banknotesNeeded, banknotesInStock);
             sumLeft -= banknotes[i] * faceValue;
@@ -79,11 +81,10 @@ public class ATM {
 
         if (sumLeft != 0) {
             System.out.println("Извините, но мы не можем выдать такую сумму. Укажите другую");
-            return;
         } else {
             for (int i = 0; i < banknotes.length; i++) {
                 if (banknotes[i] != 0) {
-                    faceValues[i].cassete.getCash(banknotes[i]);
+                    cassettes[i].getCash(banknotes[i]);
                 }
             }
             System.out.println("Сумма выдана полностью");
@@ -92,17 +93,17 @@ public class ATM {
 
     public int getTotalCash() {
         int result = 0;
-        for (FaceValue faceValue : faceValues) {
-            result += faceValue.getTotalCash();
+        for (Cassette cassette : cassettes) {
+            result += cassette.getTotalCash();
         }
         return result;
     }
 
-    public FaceValue[] getFaceValues() {
-        return faceValues;
+    int[] getFaceValuesList() {
+        return faceValuesList;
     }
 
-    private void printWelcomeMessage() {
+    public void printWelcomeMessage() {
         System.out.println("===================================================" +
                 "\nЗдравствуйте и добро пожалость в " + bankName + "!" +
                 "\n\nВас обслуживает банкомат под номером " + atmSN +

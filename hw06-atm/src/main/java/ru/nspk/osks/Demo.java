@@ -1,27 +1,30 @@
 package ru.nspk.osks;
 
 import ru.nspk.osks.atm.ATM;
-import ru.nspk.osks.atm.Cassete;
-import ru.nspk.osks.atm.FaceValue;
+import ru.nspk.osks.atm.Cassette;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Demo {
     public static void main(String[] args) {
-        FaceValue[] faceValues = {
-                new FaceValue(100, new Cassete("100 руб.", 2)),
-                new FaceValue(1000, new Cassete("1000 руб.", 20)),
-                new FaceValue(500, new Cassete("500 руб.", 80)),
-                new FaceValue(200, new Cassete("200 руб.", 1)),
-                new FaceValue(5000, new Cassete("5000 руб.", 10))
+        Cassette[] cassettes = {
+                new Cassette(100, 40),
+                new Cassette(1000, 44),
+                new Cassette(500, 80),
+                new Cassette(2000, 60),
+                new Cassette(5000, 20),
         };
-        ATM atm = new ATM("Ноунейм Банк", "999111333", "+7 (409) 654 99 99", faceValues);
+        ATM atm = new ATM("Ноунейм Банк", "00000001", "+7 (409) 654 99 99", cassettes);
+        atm.printWelcomeMessage();
 
         System.out.println("Всего налички: " + atm.getTotalCash());
         System.out.println("=====================");
 
-        atm.getCash(500);
+        atm.getCash(100500);
+        atm.getCash(9000);
+        atm.getCash(900);
+        atm.getCash(1000);
+
+        atm.putCash(500, 5);
 
         System.out.println("=====================");
         System.out.println("Всего налички: " + atm.getTotalCash());
