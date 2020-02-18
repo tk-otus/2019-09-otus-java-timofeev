@@ -1,27 +1,24 @@
 package ru.nspk.osks.atm;
 
-public class Cassette implements Comparable<Cassette> {
+public class Cassette implements Cell, Comparable<Cassette> {
     static final int MAX_BANKNOTES_NUMBER = 100;
-    private final int faceValue;
+    private final Banknote banknote;
     private int banknotesCount;
 
-    public Cassette(int faceValue) {
-        this(faceValue, 0);
+    public Cassette(Banknote banknote) {
+        this(banknote, 0);
     }
 
-    public Cassette(int faceValue, int banknotesNumber) {
-        if (faceValue <= 0) {
+    public Cassette(Banknote banknote, int banknotesNumber) {
+        if (RUBanknote.RUB_50.getValue() > banknote.getValue() || banknote.getValue() > RUBanknote.RUB_5000.getValue()) {
             throw new IllegalArgumentException("Не поддерживаемое значение номинала купюр");
         }
-        this.faceValue = faceValue;
-        putCash(banknotesNumber);
+        this.banknote = banknote;
+        putBanknotesIn(banknotesNumber);
     }
 
-    public int getBanknotesCount() {
-        return banknotesCount;
-    }
-
-    public int putCash(int count) {
+    @Override
+    public void putBanknotesIn(int count) {
         if (count <= 0) {
             throw new IllegalArgumentException("Не поддерживаемое значение количества купюр");
         }
@@ -29,10 +26,10 @@ public class Cassette implements Comparable<Cassette> {
             throw new IllegalArgumentException("В корзине не хватает места");
         }
         banknotesCount += count;
-        return banknotesCount;
     }
 
-    public int getCash(int count) {
+    @Override
+    public void getBanknotesOut(int count) {
         if (count <= 0) {
             throw new IllegalArgumentException("Не поддерживаемое значение количества купюр");
         }
@@ -41,27 +38,30 @@ public class Cassette implements Comparable<Cassette> {
         }
         banknotesCount -= count;
         System.out.println(false + ": Выдано " + count + " банкнот");
+    }
+
+    public int getFullAmount() {
+        return banknotesCount * banknote.getValue();
+    }
+
+    public int getBanknote() {
+        return banknote.getValue();
+    }
+
+    public int getBanknotesCount() {
         return banknotesCount;
-    }
-
-    public int getFaceValue() {
-        return faceValue;
-    }
-
-    public int getTotalCash() {
-        return banknotesCount * faceValue;
     }
 
     @Override
     public int compareTo(Cassette o) {
-        int compare = o.getFaceValue();
-        return faceValue - compare;
+        int compare = o.getBanknote();
+        return banknote.getValue() - compare;
     }
 
     @Override
     public String toString() {
         return "Cassette{" +
-                "faceValue=" + faceValue +
+                "banknote=" + banknote +
                 ", banknotesCount=" + banknotesCount +
                 '}';
     }

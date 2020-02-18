@@ -10,20 +10,20 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ATMTest {
-    private ATM atm;
+    private NonameBankATM atm;
     private int totalCash;
 
     @BeforeEach
     public void createATM() {
         Cassette[] cassettes = {
-                new Cassette(100, 40),
-                new Cassette(1000, 44),
-                new Cassette(500, 80),
-                new Cassette(200, 60),
-                new Cassette(5000, 20),
+                new Cassette(RUBanknote.RUB_100, 40),
+                new Cassette(RUBanknote.RUB_1000, 44),
+                new Cassette(RUBanknote.RUB_500, 80),
+                new Cassette(RUBanknote.RUB_200, 60),
+                new Cassette(RUBanknote.RUB_5000, 20),
         };
-        atm = new ATM("Ноунейм Банк", "00000001", "+7 (409) 654 99 99", cassettes);
-        totalCash = atm.getTotalCash();
+        atm = new NonameBankATM("Ноунейм Банк", "00000001", "+7 (409) 654 99 99", cassettes);
+        totalCash = atm.getFullAmount();
     }
 
     @Test
@@ -35,20 +35,20 @@ public class ATMTest {
 
     @Test
     public void testTotalCash() {
-        assertEquals(atm.getTotalCash(), 200000);
+        assertEquals(atm.getFullAmount(), 200000);
     }
 
     @Test
     public void testGetCash() {
         int cash = 100000;
-        atm.getCash(cash);
-        assertEquals(totalCash - cash, atm.getTotalCash());
+        atm.getBanknotesOut(cash);
+        assertEquals(totalCash - cash, atm.getFullAmount());
     }
 
     @Test
     public void testGetCashWithZero() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            atm.getCash(0);
+            atm.getBanknotesOut(0);
         });
         assertTrue(exception.getMessage().contains("Нельзя использовать нулевое или отрицаиельное число"));
     }
@@ -56,44 +56,44 @@ public class ATMTest {
     @Test
     public void testGetCashWithNegative() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            atm.getCash(-100);
+            atm.getBanknotesOut(-100);
         });
         assertTrue(exception.getMessage().contains("Нельзя использовать нулевое или отрицаиельное число"));
     }
 
     @Test
     public void testGetCashWithNoFaceValue() {
-        atm.getCash(50);
-        assertEquals(totalCash, atm.getTotalCash());
+        atm.getBanknotesOut(50);
+        assertEquals(totalCash, atm.getFullAmount());
     }
 
     @Test
     public void testGetCashOverdraft() {
-        atm.getCash(totalCash + 100);
-        assertEquals(totalCash, atm.getTotalCash());
+        atm.getBanknotesOut(totalCash + 100);
+        assertEquals(totalCash, atm.getFullAmount());
     }
 
     @Test
     public void testGetCashWithNotBanknotes() {
         Cassette[] cassettes = {
-                new Cassette(1000, 1),
+                new Cassette(RUBanknote.RUB_1000, 1),
         };
-        ATM atm = new ATM("Ноунейм Банк", "00000001", "+7 (409) 654 99 99", cassettes);
-        int totalCache = atm.getTotalCash();
-        atm.getCash(500);
-        assertEquals(totalCache, atm.getTotalCash());
+        NonameBankATM atm = new NonameBankATM("Ноунейм Банк", "00000001", "+7 (409) 654 99 99", cassettes);
+        int totalCache = atm.getFullAmount();
+        atm.getBanknotesOut(500);
+        assertEquals(totalCache, atm.getFullAmount());
     }
 
     @Test
     public void testPutCash() {
-        atm.putCash(5000, 20);
-        assertEquals(totalCash + 20 * 5000, atm.getTotalCash());
+        atm.putBanknotesIn(RUBanknote.RUB_5000, 20);
+        assertEquals(totalCash + 20 * 5000, atm.getFullAmount());
     }
 
     @Test
     public void testPutCashWithZero() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            atm.putCash(5000, 0);
+            atm.putBanknotesIn(RUBanknote.RUB_5000, 0);
         });
         assertTrue(exception.getMessage().contains("Нельзя использовать нулевое или отрицаиельное число"));
     }
@@ -101,7 +101,7 @@ public class ATMTest {
     @Test
     public void testPutCashWithNegative() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            atm.putCash(5000, -100);
+            atm.putBanknotesIn(RUBanknote.RUB_5000, -100);
         });
         assertTrue(exception.getMessage().contains("Нельзя использовать нулевое или отрицаиельное число"));
     }
@@ -109,7 +109,7 @@ public class ATMTest {
     @Test
     public void testPutCashWithNoFaceValue() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            atm.putCash(50, 10);
+            atm.putBanknotesIn(RUBanknote.RUB_50, 10);
         });
         assertTrue(exception.getMessage().contains("Банкомат не принимает купюры данного номинала"));
     }

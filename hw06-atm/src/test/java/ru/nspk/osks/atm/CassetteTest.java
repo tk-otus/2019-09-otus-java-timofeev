@@ -11,20 +11,20 @@ public class CassetteTest {
 
     @BeforeEach
     public void createCassette() {
-        cassette = new Cassette(500, 20);
+        cassette = new Cassette(RUBanknote.RUB_500, 20);
         totalBanknotes = cassette.getBanknotesCount();
     }
 
     @Test
     public void testPutCash() {
-        cassette.putCash(10);
+        cassette.putBanknotesIn(10);
         assertEquals(cassette.getBanknotesCount(), totalBanknotes + 10);
     }
 
     @Test
     public void testPutCashWithOverdraft() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            cassette.putCash(Cassette.MAX_BANKNOTES_NUMBER + 1);
+            cassette.putBanknotesIn(Cassette.MAX_BANKNOTES_NUMBER + 1);
         });
         assertTrue(exception.getMessage().contains("В корзине не хватает места"));
     }
@@ -32,7 +32,7 @@ public class CassetteTest {
     @Test
     public void testPutCashWithZero() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            cassette.putCash(0);
+            cassette.putBanknotesIn(0);
         });
         assertTrue(exception.getMessage().contains("Не поддерживаемое значение количества купюр"));
     }
@@ -40,21 +40,21 @@ public class CassetteTest {
     @Test
     public void testPutCashWithNegative() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            cassette.putCash(-10);
+            cassette.putBanknotesIn(-10);
         });
         assertTrue(exception.getMessage().contains("Не поддерживаемое значение количества купюр"));
     }
 
     @Test
     public void testGetCash() {
-        cassette.getCash(10);
+        cassette.getBanknotesOut(10);
         assertEquals(cassette.getBanknotesCount(), totalBanknotes - 10);
     }
 
     @Test
     public void testGetCashWithOverdraft() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            cassette.getCash(Cassette.MAX_BANKNOTES_NUMBER + 1);
+            cassette.getBanknotesOut(Cassette.MAX_BANKNOTES_NUMBER + 1);
         });
         assertTrue(exception.getMessage().contains("В корзине не хватает купюр"));
     }
@@ -62,7 +62,7 @@ public class CassetteTest {
     @Test
     public void testGetCashWithZero() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            cassette.putCash(0);
+            cassette.getBanknotesOut(0);
         });
         assertTrue(exception.getMessage().contains("Не поддерживаемое значение количества купюр"));
     }
@@ -70,7 +70,7 @@ public class CassetteTest {
     @Test
     public void testGetCashWithNegative() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            cassette.putCash(-10);
+            cassette.getBanknotesOut(-10);
         });
         assertTrue(exception.getMessage().contains("Не поддерживаемое значение количества купюр"));
     }
