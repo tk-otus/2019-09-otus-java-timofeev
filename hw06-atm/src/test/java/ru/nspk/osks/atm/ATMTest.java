@@ -18,11 +18,11 @@ public class ATMTest {
     public void createATM() {
         List<Cassette> cassettes = new ArrayList<>() {
             {
-                add(new Cassette(RUBanknote.RUB_100, 40));
-                add(new Cassette(RUBanknote.RUB_1000, 44));
+                add(new Cassette(RUBanknote.RUB_1000, 38));
                 add(new Cassette(RUBanknote.RUB_500, 80));
                 add(new Cassette(RUBanknote.RUB_200, 60));
                 add(new Cassette(RUBanknote.RUB_5000, 20));
+                add(new Cassette(RUBanknote.RUB_5000, 2));
             }
         };
         atm = new NonameBankATM("Ноунейм Банк", "00000001", "+7 (409) 654 99 99", cassettes);
@@ -32,13 +32,13 @@ public class ATMTest {
     @Test
     public void testCassettesSorting() {
         List<Integer> list1 = atm.getCassettes().stream().map(c -> c.getBanknote().getValue()).collect(Collectors.toList());
-        List<Integer> list2 = Arrays.stream(new int[] {100, 200, 500, 1000, 5000}).boxed().collect(Collectors.toList());
+        List<Integer> list2 = Arrays.stream(new int[] {200, 500, 1000, 5000, 5000}).boxed().collect(Collectors.toList());
         assertEquals(list1, list2);
     }
 
     @Test
     public void testTotalCash() {
-        assertEquals(atm.getFullAmount(), 200000);
+        assertEquals(200000, atm.getFullAmount());
     }
 
     @Test
@@ -84,6 +84,14 @@ public class ATMTest {
         int totalCache = atm.getFullAmount();
         atm.getBanknotesOut(500);
         assertEquals(totalCache, atm.getFullAmount());
+    }
+
+    @Test
+    public void testGetCashFromTwoSameCassettes() {
+        atm.getBanknotesOut(110_000);
+        List<Cassette> cassettes = atm.getCassettes();
+        assertEquals(0, cassettes.get(cassettes.size() - 1).getBanknotesCount());
+        assertEquals(0, cassettes.get(cassettes.size() - 2).getBanknotesCount());
     }
 
     @Test

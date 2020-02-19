@@ -34,7 +34,7 @@ public class Cassette implements Cell, Comparable<Cassette> {
             throw new IllegalArgumentException("В корзине не хватает купюр");
         }
         banknotesCount -= count;
-        System.out.println(false + ": Выдано " + count + " банкнот");
+        System.out.println(banknote + ": Выдано " + count + " банкнот");
     }
 
     @Override
