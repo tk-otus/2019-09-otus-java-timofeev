@@ -4,4 +4,6 @@ public interface Banknote {
 
     int getValue();
 
+    String getPrintableValue();
+
 }

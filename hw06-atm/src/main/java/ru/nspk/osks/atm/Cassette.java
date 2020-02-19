@@ -10,9 +10,6 @@ public class Cassette implements Cell, Comparable<Cassette> {
     }
 
     public Cassette(Banknote banknote, int banknotesNumber) {
-        if (RUBanknote.RUB_50.getValue() > banknote.getValue() || banknote.getValue() > RUBanknote.RUB_5000.getValue()) {
-            throw new IllegalArgumentException("Не поддерживаемое значение номинала купюр");
-        }
         this.banknote = banknote;
         putBanknotesIn(banknotesNumber);
     }
@@ -40,12 +37,22 @@ public class Cassette implements Cell, Comparable<Cassette> {
         System.out.println(false + ": Выдано " + count + " банкнот");
     }
 
+    @Override
     public int getFullAmount() {
         return banknotesCount * banknote.getValue();
     }
 
-    public int getBanknote() {
-        return banknote.getValue();
+    @Override
+    public int getFreeSpace() {
+        return MAX_BANKNOTES_NUMBER - banknotesCount;
+    }
+
+    public Banknote getBanknote() {
+        return banknote;
+    }
+
+    public int getBanknoteFaceValue() {
+        return getBanknote().getValue();
     }
 
     public int getBanknotesCount() {
@@ -54,7 +61,7 @@ public class Cassette implements Cell, Comparable<Cassette> {
 
     @Override
     public int compareTo(Cassette o) {
-        int compare = o.getBanknote();
+        int compare = o.getBanknote().getValue();
         return banknote.getValue() - compare;
     }
 

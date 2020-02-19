@@ -7,5 +7,7 @@ public interface Cell {
     void getBanknotesOut(int count);
 
     int getFullAmount();
+
+    int getFreeSpace();
     
 }
