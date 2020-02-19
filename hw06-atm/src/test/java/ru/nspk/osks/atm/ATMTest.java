@@ -95,6 +95,17 @@ public class ATMTest {
     }
 
     @Test
+    public void testGetCashWithEmptyCassettes() {
+        List<Cassette> cassettes = new ArrayList<>();
+        cassettes.add(new Cassette(RUBanknote.RUB_500, 50));
+        cassettes.add(new Cassette(RUBanknote.RUB_1000, 0));
+        NonameBankATM atm = new NonameBankATM("Ноунейм Банк", "00000001", "+7 (409) 654 99 99", cassettes);
+        int totalCache = atm.getFullAmount();
+        atm.getBanknotesOut(5000);
+        assertEquals(totalCache - 5000, atm.getFullAmount());
+    }
+
+    @Test
     public void testPutCash() {
         atm.putBanknotesIn(RUBanknote.RUB_5000, 20);
         assertEquals(totalCash + 20 * 5000, atm.getFullAmount());

@@ -80,6 +80,9 @@ public class NonameBankATM implements ATM {
             int banknotesNeeded = (sumToLeft - mod) / faceValue;
             int banknotesInStock = cassette.getBanknotesCount();
             int banknotesToGetOut = Math.min(banknotesNeeded, banknotesInStock);
+            if (banknotesToGetOut == 0) {
+                continue;
+            }
 
             cassettesToGetOut.put(cassette, banknotesToGetOut);
             sumToLeft -= banknotesToGetOut * faceValue;

@@ -9,9 +9,12 @@ public class Cassette implements Cell, Comparable<Cassette> {
         this(banknote, 0);
     }
 
-    public Cassette(Banknote banknote, int banknotesNumber) {
+    public Cassette(Banknote banknote, int banknotesCount) {
         this.banknote = banknote;
-        putBanknotesIn(banknotesNumber);
+        if (banknotesCount < 0 || banknotesCount > MAX_BANKNOTES_NUMBER) {
+            throw new IllegalArgumentException("Не поддерживаемое значение количества купюр");
+        }
+        this.banknotesCount = banknotesCount;
     }
 
     @Override
