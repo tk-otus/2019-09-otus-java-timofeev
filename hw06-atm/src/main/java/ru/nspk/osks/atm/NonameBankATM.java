@@ -39,7 +39,7 @@ public class NonameBankATM implements ATM {
 
         int totalFreeSpace = cassetteWithFaceValue.stream().mapToInt(Cassette::getFreeSpace).sum();
         if (totalFreeSpace < count) {
-            System.out.println("К сожалению мы не можем принять " + count + " купюр по " + banknote.getPrintableValue());
+            System.out.println("К сожалению мы не можем принять " + count + " купюр по " + banknote.getValue() + " руб.");
             return;
         }
 
@@ -63,7 +63,7 @@ public class NonameBankATM implements ATM {
         System.out.println("Вы запросили " + sum + " руб. к выдаче");
         if (sum % cassettes.get(0).getBanknoteFaceValue() != 0) {
             System.out.println("К сожалению мы не можем выдать вам эту сумму. Укажите сумма кратную " +
-                    cassettes.get(0).getBanknote().getPrintableValue());
+                    cassettes.get(0).getBanknote().getValue() + " руб.");
             return;
         }
 

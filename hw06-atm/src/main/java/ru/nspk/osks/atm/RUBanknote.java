@@ -21,10 +21,4 @@ public enum RUBanknote implements Banknote {
         return faceValue;
     }
 
-    @Override
-    public String getPrintableValue() {
-        return faceValue + " руб.";
-    }
-
-
 }
