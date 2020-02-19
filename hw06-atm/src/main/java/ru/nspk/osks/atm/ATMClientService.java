@@ -1,11 +1,9 @@
 package ru.nspk.osks.atm;
 
-public interface ATM {
+public interface ATMClientService {
 
     void putBanknotesIn(Banknote banknote, int count);
 
     void getBanknotesOut(int sum);
-
-    int getFullAmount();
 
 }

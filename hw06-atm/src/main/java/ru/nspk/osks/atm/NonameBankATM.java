@@ -3,7 +3,7 @@ package ru.nspk.osks.atm;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class NonameBankATM implements ATM {
+public class NonameBankATM implements ATMClientService, ATMBankService {
     public static final int MAX_FACE_VALUES = 5;
 
     private final String bankName;
@@ -99,6 +99,7 @@ public class NonameBankATM implements ATM {
         }
     }
 
+    @Override
     public int getFullAmount() {
         int result = 0;
         for (Cassette cassette : cassettes) {
