@@ -1,6 +1,7 @@
 package ru.nspk.osks.atm;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class NonameBankATM implements ATM {
     public static final int MAX_FACE_VALUES = 5;
@@ -29,21 +30,28 @@ public class NonameBankATM implements ATM {
             throw new IllegalArgumentException("Нельзя использовать нулевое или отрицаиельное число");
         }
 
-        Optional<Cassette> cassetteWithFaceValue = cassettes.stream()
+        List<Cassette> cassetteWithFaceValue = cassettes.stream()
                 .filter(c -> c.getBanknoteFaceValue() == banknote.getValue())
-                .findAny();
+                .collect(Collectors.toList());
         if (cassetteWithFaceValue.isEmpty()) {
             throw new IllegalArgumentException("Банкомат не принимает купюры данного номинала");
         }
 
-        Optional<Cassette> cassette = cassetteWithFaceValue.stream()
-                .filter(c -> c.getFreeSpace() >= count)
-                .findFirst();
-        if (cassette.isEmpty()) {
+        int totalFreeSpace = cassetteWithFaceValue.stream().mapToInt(Cassette::getFreeSpace).sum();
+        if (totalFreeSpace < count) {
             System.out.println("К сожалению мы не можем принять " + count + " купюр по " + banknote.getPrintableValue());
             return;
         }
-        cassette.get().putBanknotesIn(count);
+
+        for (Cassette cassette : cassetteWithFaceValue) {
+            int freeSpace = cassette.getFreeSpace();
+            int banknotesToPutIn = Math.min(freeSpace, count);
+            cassette.putBanknotesIn(banknotesToPutIn);
+            count -= banknotesToPutIn;
+            if (count == 0) {
+                break;
+            }
+        }
     }
 
     @Override

@@ -123,4 +123,11 @@ public class ATMTest {
         });
         assertTrue(exception.getMessage().contains("Банкомат не принимает купюры данного номинала"));
     }
+    @Test
+    public void testPutCashInTwoSameCassettes() {
+        atm.putBanknotesIn(RUBanknote.RUB_5000, 100);
+        List<Cassette> cassettes = atm.getCassettes();
+        assertEquals(22, cassettes.get(cassettes.size() - 1).getBanknotesCount());
+        assertEquals(100, cassettes.get(cassettes.size() - 2).getBanknotesCount());
+    }
 }
