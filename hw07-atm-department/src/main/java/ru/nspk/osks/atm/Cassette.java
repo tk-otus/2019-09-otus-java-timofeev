@@ -17,6 +17,10 @@ public class Cassette implements Cell, Comparable<Cassette> {
         this.banknotesCount = banknotesCount;
     }
 
+    public Cassette(Cassette cassette) {
+        this(cassette.banknote, cassette.banknotesCount);
+    }
+
     @Override
     public void putBanknotesIn(int count) {
         if (count <= 0) {

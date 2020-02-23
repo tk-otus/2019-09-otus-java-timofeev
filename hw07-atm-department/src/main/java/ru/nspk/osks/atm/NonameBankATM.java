@@ -1,9 +1,8 @@
 package ru.nspk.osks.atm;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import ru.nspk.osks.atm.memento.CassetteOriginator;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class NonameBankATM implements ATM {
@@ -13,6 +12,7 @@ public class NonameBankATM implements ATM {
     private final String atmSN;
     private final String supportContacts;
     private final List<Cassette> cassettes;
+    private List<CassetteOriginator> cassetteOriginators = new ArrayList<>();
 
     public NonameBankATM(String bankName, String atmSN, String supportContacts, List<Cassette> cassettes) {
         this.bankName = bankName;
@@ -25,6 +25,12 @@ public class NonameBankATM implements ATM {
 
         Collections.sort(cassettes);
         this.cassettes = cassettes;
+
+        for (Cassette cassette : cassettes) {
+            CassetteOriginator cassetteOriginator = new CassetteOriginator();
+            cassetteOriginator.saveState(cassette);
+            cassetteOriginators.add(cassetteOriginator);
+        }
     }
 
     @Override
@@ -44,6 +50,10 @@ public class NonameBankATM implements ATM {
         if (totalFreeSpace < count) {
             System.out.println("К сожалению мы не можем принять " + count + " купюр по " + banknote.getValue() + " руб.");
             return;
+        }
+
+        for (int i = 0; i < cassettes.size(); i++) {
+            cassetteOriginators.get(i).saveState(cassettes.get(i));
         }
 
         for (Cassette cassette : cassetteWithFaceValue) {
@@ -97,6 +107,9 @@ public class NonameBankATM implements ATM {
         if (sumToLeft != 0) {
             System.out.println("Извините, но мы не можем выдать такую сумму. Укажите другую");
         } else {
+            for (int i = 0; i < cassettes.size(); i++) {
+                cassetteOriginators.get(i).saveState(cassettes.get(i));
+            }
             cassettesToGetOut.forEach(Cassette::getBanknotesOut);
             System.out.println("Сумма выдана полностью");
         }
@@ -109,6 +122,14 @@ public class NonameBankATM implements ATM {
             result += cassette.getFullAmount();
         }
         return result;
+    }
+
+    public void restoreState() {
+        for (int i = 0; i < cassettes.size(); i++) {
+            CassetteOriginator cassetteOriginator = cassetteOriginators.get(i);
+            Cassette cassette = cassetteOriginator.restoreState();
+            cassettes.set(i, cassette);
+        }
     }
 
     public List<Cassette> getCassettes() {

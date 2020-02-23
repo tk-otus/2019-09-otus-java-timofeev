@@ -3,8 +3,6 @@ package ru.nspk.osks;
 import ru.nspk.osks.atm.Cassette;
 import ru.nspk.osks.atm.NonameBankATM;
 import ru.nspk.osks.atm.RUBanknote;
-import ru.nspk.osks.atm.command.Executor;
-import ru.nspk.osks.atm.command.GetFullAmountCommand;
 import ru.nspk.osks.department.Department;
 import ru.nspk.osks.department.DepartmentImpl;
 
@@ -26,6 +24,17 @@ public class Demo {
 
         Department department = new DepartmentImpl("СВАО");
         department.addATM(atm);
+
+        System.out.println("В отделении '" + department.getName() + "' осталось " + department.getAllAmounts() + " руб.");
+
+        System.out.println("Добавляем 10000 руб. и сохраняем состояние");
+        atm.putBanknotesIn(RUBanknote.RUB_5000, 2);
+
+        System.out.println("В отделении '" + department.getName() + "' осталось " + department.getAllAmounts() + " руб.");
+
+        System.out.println("Возвращаем предыдущее состояние");
+
+        atm.restoreState();
 
         System.out.println("В отделении '" + department.getName() + "' осталось " + department.getAllAmounts() + " руб.");
     }

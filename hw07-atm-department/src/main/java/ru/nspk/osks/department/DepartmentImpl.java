@@ -15,11 +15,6 @@ public class DepartmentImpl implements Department {
         this.name = name;
     }
 
-    public DepartmentImpl(String name, List<ATM> atms) {
-        this.name = name;
-        this.atms = atms;
-    }
-
     @Override
     public void addATM(ATM atm) {
         atms.add(atm);
