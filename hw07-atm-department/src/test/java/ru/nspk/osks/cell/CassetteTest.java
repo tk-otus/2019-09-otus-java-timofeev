@@ -1,7 +1,11 @@
-package ru.nspk.osks.atm;
+package ru.nspk.osks.cell;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.nspk.osks.atm.RUBanknote;
+import ru.nspk.osks.cell.command.Command;
+import ru.nspk.osks.cell.command.GetBanknotesOutCommand;
+import ru.nspk.osks.cell.command.PutBanknotesInCommand;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,7 +30,7 @@ public class CassetteTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             cassette.putBanknotesIn(Cassette.MAX_BANKNOTES_NUMBER + 1);
         });
-        assertTrue(exception.getMessage().contains("В корзине не хватает места"));
+        assertTrue(exception.getMessage().contains("Не поддерживаемое значение количества купюр"));
     }
 
     @Test
@@ -46,6 +50,20 @@ public class CassetteTest {
     }
 
     @Test
+    public void testUndoRedoPutCash() {
+        int count = 10;
+        int banknotesCount = cassette.getBanknotesCount();
+        Command command = new PutBanknotesInCommand(cassette, count);
+
+        cassette.execute(command);
+
+        assertTrue(cassette.undo());
+        assertEquals(banknotesCount, cassette.getBanknotesCount());
+        assertTrue(cassette.redo());
+        assertEquals(banknotesCount + count, cassette.getBanknotesCount());
+    }
+
+    @Test
     public void testGetCash() {
         cassette.getBanknotesOut(10);
         assertEquals(cassette.getBanknotesCount(), totalBanknotes - 10);
@@ -56,7 +74,7 @@ public class CassetteTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             cassette.getBanknotesOut(Cassette.MAX_BANKNOTES_NUMBER + 1);
         });
-        assertTrue(exception.getMessage().contains("В корзине не хватает купюр"));
+        assertTrue(exception.getMessage().contains("Не поддерживаемое значение количества купюр"));
     }
 
     @Test
@@ -73,5 +91,19 @@ public class CassetteTest {
             cassette.getBanknotesOut(-10);
         });
         assertTrue(exception.getMessage().contains("Не поддерживаемое значение количества купюр"));
+    }
+
+    @Test
+    public void testUndoRedoGetCash() {
+        int count = 10;
+        int banknotesCount = cassette.getBanknotesCount();
+        Command command = new GetBanknotesOutCommand(cassette, count);
+
+        cassette.execute(command);
+
+        assertTrue(cassette.undo());
+        assertEquals(banknotesCount, cassette.getBanknotesCount());
+        assertTrue(cassette.redo());
+        assertEquals(banknotesCount - count, cassette.getBanknotesCount());
     }
 }

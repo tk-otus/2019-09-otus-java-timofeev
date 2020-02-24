@@ -1,4 +1,4 @@
-package ru.nspk.osks.atm;
+package ru.nspk.osks.cell;
 
 public interface Cell {
 
@@ -9,5 +9,5 @@ public interface Cell {
     int getFullAmount();
 
     int getFreeSpace();
-    
+
 }
