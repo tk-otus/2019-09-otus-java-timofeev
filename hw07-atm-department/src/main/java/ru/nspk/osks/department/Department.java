@@ -10,5 +10,7 @@ public interface Department {
 
     int getAllAmounts();
 
+    void resetToInitialState();
+
     String getName();
 }

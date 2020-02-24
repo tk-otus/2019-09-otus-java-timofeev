@@ -3,7 +3,6 @@ package ru.nspk.osks.atm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.nspk.osks.cell.Cassette;
-import ru.nspk.osks.cell.command.PutBanknotesInCommand;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -3,6 +3,7 @@ package ru.nspk.osks.department;
 import ru.nspk.osks.atm.ATM;
 import ru.nspk.osks.atm.command.Executor;
 import ru.nspk.osks.atm.command.GetFullAmountCommand;
+import ru.nspk.osks.atm.command.ResetToInitialStateCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +29,23 @@ public class DepartmentImpl implements Department {
     @Override
     public int getAllAmounts() {
         int result = 0;
-        GetFullAmountCommand getFullAmountCommand = new GetFullAmountCommand();
-        Executor executor = new Executor();
-        executor.addCommand(getFullAmountCommand);
         for (ATM atm : atms) {
-            executor.executeCommands(atm);
+            Executor executor = new Executor();
+            GetFullAmountCommand getFullAmountCommand = new GetFullAmountCommand(atm);
+            executor.addCommand(getFullAmountCommand);
+            executor.executeCommands();
             result += getFullAmountCommand.getResult();
         }
         return result;
+    }
+
+    @Override
+    public void resetToInitialState() {
+        Executor executor = new Executor();
+        for (ATM atm : atms) {
+            executor.addCommand(new ResetToInitialStateCommand(atm));
+        }
+        executor.executeCommands();
     }
 
     public String getName() {
