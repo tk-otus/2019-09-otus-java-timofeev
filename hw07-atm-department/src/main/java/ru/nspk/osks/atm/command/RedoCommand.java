@@ -2,15 +2,15 @@ package ru.nspk.osks.atm.command;
 
 import ru.nspk.osks.atm.ATM;
 
-public class ResetToInitialStateCommand implements Command {
+public class RedoCommand implements Command {
     private ATM atm;
 
-    public ResetToInitialStateCommand(ATM atm) {
+    public RedoCommand(ATM atm) {
         this.atm = atm;
     }
 
     @Override
     public void execute() {
-        atm.resetToInitialState();
+        atm.redo();
     }
 }

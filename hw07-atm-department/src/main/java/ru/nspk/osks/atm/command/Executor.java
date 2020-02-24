@@ -12,9 +12,9 @@ public class Executor {
         commands.add(command);
     }
 
-    public void executeCommands(ATM atm) {
+    public void executeCommands() {
         for (Command command : commands) {
-            command.execute(atm);
+            command.execute();
         }
     }
 }

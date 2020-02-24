@@ -4,9 +4,14 @@ import ru.nspk.osks.atm.ATM;
 
 public class GetFullAmountCommand implements Command {
     private int result;
+    private ATM atm;
+
+    public GetFullAmountCommand(ATM atm) {
+        this.atm = atm;
+    }
 
     @Override
-    public void execute(ATM atm) {
+    public void execute() {
         result = atm.getFullAmount();
     }
 

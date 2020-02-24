@@ -1,6 +1,9 @@
 package ru.nspk.osks.atm;
 
-import ru.nspk.osks.atm.memento.CassetteOriginator;
+import ru.nspk.osks.atm.command.Command;
+import ru.nspk.osks.cell.Cassette;
+import ru.nspk.osks.cell.command.GetBanknotesOutCommand;
+import ru.nspk.osks.cell.command.PutBanknotesInCommand;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -12,7 +15,6 @@ public class NonameBankATM implements ATM {
     private final String atmSN;
     private final String supportContacts;
     private final List<Cassette> cassettes;
-    private List<CassetteOriginator> cassetteOriginators = new ArrayList<>();
 
     public NonameBankATM(String bankName, String atmSN, String supportContacts, List<Cassette> cassettes) {
         this.bankName = bankName;
@@ -26,11 +28,6 @@ public class NonameBankATM implements ATM {
         Collections.sort(cassettes);
         this.cassettes = cassettes;
 
-        for (Cassette cassette : cassettes) {
-            CassetteOriginator cassetteOriginator = new CassetteOriginator();
-            cassetteOriginator.saveState(cassette);
-            cassetteOriginators.add(cassetteOriginator);
-        }
     }
 
     @Override
@@ -52,19 +49,20 @@ public class NonameBankATM implements ATM {
             return;
         }
 
-        for (int i = 0; i < cassettes.size(); i++) {
-            cassetteOriginators.get(i).saveState(cassettes.get(i));
-        }
-
         for (Cassette cassette : cassetteWithFaceValue) {
             int freeSpace = cassette.getFreeSpace();
             int banknotesToPutIn = Math.min(freeSpace, count);
-            cassette.putBanknotesIn(banknotesToPutIn);
+            cassette.execute(new PutBanknotesInCommand(cassette, banknotesToPutIn));
             count -= banknotesToPutIn;
             if (count == 0) {
                 break;
             }
         }
+    }
+
+    @Override
+    public void execute(Command command) {
+        command.execute();
     }
 
     @Override
@@ -107,10 +105,10 @@ public class NonameBankATM implements ATM {
         if (sumToLeft != 0) {
             System.out.println("Извините, но мы не можем выдать такую сумму. Укажите другую");
         } else {
-            for (int i = 0; i < cassettes.size(); i++) {
-                cassetteOriginators.get(i).saveState(cassettes.get(i));
+            for (Map.Entry<Cassette, Integer> entry : cassettesToGetOut.entrySet()) {
+                Cassette cassette = entry.getKey();
+                cassette.execute(new GetBanknotesOutCommand(cassette, entry.getValue()));
             }
-            cassettesToGetOut.forEach(Cassette::getBanknotesOut);
             System.out.println("Сумма выдана полностью");
         }
     }
@@ -124,11 +122,23 @@ public class NonameBankATM implements ATM {
         return result;
     }
 
-    public void restoreState() {
-        for (int i = 0; i < cassettes.size(); i++) {
-            CassetteOriginator cassetteOriginator = cassetteOriginators.get(i);
-            Cassette cassette = cassetteOriginator.restoreState();
-            cassettes.set(i, cassette);
+    @Override
+    public void undo() {
+        for (Cassette cassette : cassettes) cassette.undo();
+    }
+
+    @Override
+    public void redo() {
+        for (Cassette cassette : cassettes) cassette.redo();
+    }
+
+    public void resetToInitialState() {
+        for (Cassette cassette : cassettes) {
+            while (true) {
+                if (!cassette.undo()) {
+                    break;
+                }
+            }
         }
     }
 
@@ -145,4 +155,5 @@ public class NonameBankATM implements ATM {
                 "\n\nУдачного дня!" +
                 "\n===================================================");
     }
+
 }

@@ -4,4 +4,9 @@ public interface ATMBankService {
 
     int getFullAmount();
 
+    void undo();
+
+    void redo();
+
+    void resetToInitialState();
 }

@@ -2,6 +2,8 @@ package ru.nspk.osks.atm;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.nspk.osks.cell.Cassette;
+import ru.nspk.osks.cell.command.PutBanknotesInCommand;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -140,5 +142,16 @@ public class ATMTest {
         List<Cassette> cassettes = atm.getCassettes();
         assertEquals(22, cassettes.get(cassettes.size() - 1).getBanknotesCount());
         assertEquals(100, cassettes.get(cassettes.size() - 2).getBanknotesCount());
+    }
+
+    @Test
+    public void testResetToInitialState() {
+        atm.putBanknotesIn(RUBanknote.RUB_5000, 10);
+        atm.putBanknotesIn(RUBanknote.RUB_5000, 10);
+        atm.getBanknotesOut(50_000);
+        assertEquals(250_000, atm.getFullAmount());
+
+        atm.resetToInitialState();
+        assertEquals(200_000, atm.getFullAmount());
     }
 }
