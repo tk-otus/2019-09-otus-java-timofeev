@@ -1,7 +1,5 @@
 package ru.nspk.osks.atm.command;
 
-import ru.nspk.osks.atm.ATM;
-
 import java.util.ArrayList;
 import java.util.List;
 

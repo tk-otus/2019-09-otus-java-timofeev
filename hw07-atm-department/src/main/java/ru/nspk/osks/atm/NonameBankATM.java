@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 public class NonameBankATM implements ATM {
     public static final int MAX_FACE_VALUES = 5;
-
     private final String bankName;
     private final String atmSN;
     private final String supportContacts;
@@ -21,57 +20,49 @@ public class NonameBankATM implements ATM {
         this.atmSN = atmSN;
         this.supportContacts = supportContacts;
 
-        if (cassettes.size() > MAX_FACE_VALUES) {
-            throw new IllegalArgumentException("Банкомат не поддерживает больше " + MAX_FACE_VALUES + " ячеек для купюр");
-        }
+        throwExIfTrue(cassettes.size() > MAX_FACE_VALUES,
+                "Банкомат не поддерживает больше " + MAX_FACE_VALUES + " ячеек для купюр");
 
         Collections.sort(cassettes);
         this.cassettes = cassettes;
-
     }
 
     @Override
     public void putBanknotesIn(Banknote banknote, int count) {
-        if (count <= 0) {
-            throw new IllegalArgumentException("Нельзя использовать нулевое или отрицаиельное число");
-        }
+        throwExIfTrue(count <= 0, "Нельзя использовать нулевое или отрицаиельное число");
 
-        List<Cassette> cassetteWithFaceValue = cassettes.stream()
-                .filter(c -> c.getBanknoteFaceValue() == banknote.getValue())
-                .collect(Collectors.toList());
-        if (cassetteWithFaceValue.isEmpty()) {
-            throw new IllegalArgumentException("Банкомат не принимает купюры данного номинала");
-        }
+        List<Cassette> cassettes = getCassettesByBanknote(banknote);
+        throwExIfTrue(cassettes.isEmpty(), "Банкомат не принимает купюры данного номинала");
 
-        int totalFreeSpace = cassetteWithFaceValue.stream().mapToInt(Cassette::getFreeSpace).sum();
-        if (totalFreeSpace < count) {
+        if (cassettesFreeSpaceSum(cassettes) < count) {
             System.out.println("К сожалению мы не можем принять " + count + " купюр по " + banknote.getValue() + " руб.");
             return;
         }
 
-        for (Cassette cassette : cassetteWithFaceValue) {
-            int freeSpace = cassette.getFreeSpace();
-            int banknotesToPutIn = Math.min(freeSpace, count);
-            cassette.execute(new PutBanknotesInCommand(cassette, banknotesToPutIn));
-            count -= banknotesToPutIn;
+        for (Cassette cassette : cassettes) {
+            int banknotesToPut = Math.min(cassette.getFreeSpace(), count);
+            cassette.execute(new PutBanknotesInCommand(cassette, banknotesToPut));
+            count -= banknotesToPut;
             if (count == 0) {
                 break;
             }
         }
     }
 
-    @Override
-    public void execute(Command command) {
-        command.execute();
+    private int cassettesFreeSpaceSum(List<Cassette> cassettes) {
+        return cassettes.stream().mapToInt(Cassette::getFreeSpace).sum();
+    }
+
+    private List<Cassette> getCassettesByBanknote(Banknote banknote) {
+        return cassettes.stream()
+                .filter(c -> c.getBanknoteFaceValue() == banknote.getValue())
+                .collect(Collectors.toList());
     }
 
     @Override
     public void getBanknotesOut(int sum) {
-        if (sum <= 0) {
-            throw new IllegalArgumentException("Нельзя использовать нулевое или отрицаиельное число");
-        }
+        throwExIfTrue(sum <= 0, "Нельзя использовать нулевое или отрицаиельное число");
 
-        System.out.println("Вы запросили " + sum + " руб. к выдаче");
         if (sum % cassettes.get(0).getBanknoteFaceValue() != 0) {
             System.out.println("К сожалению мы не можем выдать вам эту сумму. Укажите сумма кратную " +
                     cassettes.get(0).getBanknote().getValue() + " руб.");
@@ -114,6 +105,11 @@ public class NonameBankATM implements ATM {
     }
 
     @Override
+    public void execute(Command command) {
+        command.execute();
+    }
+
+    @Override
     public int getFullAmount() {
         int result = 0;
         for (Cassette cassette : cassettes) {
@@ -146,6 +142,12 @@ public class NonameBankATM implements ATM {
         return cassettes;
     }
 
+    private void throwExIfTrue(boolean b, String s) {
+        if (b) {
+            throw new IllegalArgumentException(s);
+        }
+    }
+
     public void printWelcomeMessage() {
         System.out.println("===================================================" +
                 "\nЗдравствуйте и добро пожалость в " + bankName + "!" +
@@ -155,5 +157,4 @@ public class NonameBankATM implements ATM {
                 "\n\nУдачного дня!" +
                 "\n===================================================");
     }
-
 }
