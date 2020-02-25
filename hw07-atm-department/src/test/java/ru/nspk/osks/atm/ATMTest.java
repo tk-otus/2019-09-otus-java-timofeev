@@ -67,24 +67,29 @@ public class ATMTest {
 
     @Test
     public void testGetCashWithNoFaceValue() {
-        atm.getBanknotesOut(50);
-        assertEquals(totalCash, atm.getFullAmount());
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            atm.getBanknotesOut(50);
+        });
+        assertTrue(exception.getMessage().contains("Нет подходящего номинала"));
     }
 
     @Test
     public void testGetCashOverdraft() {
-        atm.getBanknotesOut(totalCash + 100);
-        assertEquals(totalCash, atm.getFullAmount());
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            atm.getBanknotesOut(totalCash + 200);
+        });
+        assertTrue(exception.getMessage().contains("Нет нужного количества купюр"));
     }
 
     @Test
     public void testGetCashWithNotBanknotes() {
         List<Cassette> cassettes = new ArrayList<>();
-        cassettes.add(new Cassette(RUBanknote.RUB_1000, 44));
+        cassettes.add(new Cassette(RUBanknote.RUB_1000, 0));
         NonameBankATM atm = new NonameBankATM("Ноунейм Банк", "00000001", "+7 (409) 654 99 99", cassettes);
-        int totalCache = atm.getFullAmount();
-        atm.getBanknotesOut(500);
-        assertEquals(totalCache, atm.getFullAmount());
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            atm.getBanknotesOut(1000);
+        });
+        assertTrue(exception.getMessage().contains("Нет нужного количества купюр"));
     }
 
     @Test

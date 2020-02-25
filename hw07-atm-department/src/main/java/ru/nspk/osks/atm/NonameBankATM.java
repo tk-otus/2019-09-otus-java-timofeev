@@ -68,16 +68,17 @@ public class NonameBankATM implements ATM {
 
     @Override
     public void getBanknotesOut(int sum) {
-        throwExIfTrue(sum <= 0, "Нельзя использовать нулевое или отрицаиельное число");
-
-        if (sum % cassettes.get(0).getBanknoteFaceValue() != 0) {
-            System.out.println("К сожалению мы не можем выдать вам эту сумму. Укажите сумма кратную " +
-                    cassettes.get(0).getBanknote().getValue() + " руб.");
-            return;
+        checkCanGetBanknotesOut(sum);
+        Map<Cassette, Integer> cassettesToGetOut = getCassettesToGetOut(sum);
+        for (Map.Entry<Cassette, Integer> entry : cassettesToGetOut.entrySet()) {
+            Cassette cassette = entry.getKey();
+            cassette.execute(new GetBanknotesOutCommand(cassette, entry.getValue()));
         }
+    }
 
+    private Map<Cassette, Integer> getCassettesToGetOut(int sum) {
         int sumToLeft = sum;
-        Map<Cassette, Integer> cassettesToGetOut = new HashMap<Cassette, Integer>();
+        Map<Cassette, Integer> result = new HashMap<>();
         for (int i = cassettes.size() - 1; i >= 0; i--) {
             Cassette cassette = cassettes.get(i);
             int faceValue = cassette.getBanknoteFaceValue();
@@ -93,23 +94,37 @@ public class NonameBankATM implements ATM {
                 continue;
             }
 
-            cassettesToGetOut.put(cassette, banknotesToGetOut);
+            result.put(cassette, banknotesToGetOut);
             sumToLeft -= banknotesToGetOut * faceValue;
             if (sumToLeft == 0) {
                 break;
             }
         }
-
-        if (sumToLeft != 0) {
-            System.out.println("Извините, но мы не можем выдать такую сумму. Укажите другую");
-        } else {
-            for (Map.Entry<Cassette, Integer> entry : cassettesToGetOut.entrySet()) {
-                Cassette cassette = entry.getKey();
-                cassette.execute(new GetBanknotesOutCommand(cassette, entry.getValue()));
-            }
-            System.out.println("Сумма выдана полностью");
-        }
+        return result;
     }
+
+    @Override
+    public boolean canGetBanknotesOut(int sum) {
+        try {
+            checkCanGetBanknotesOut(sum);
+        } catch (IllegalArgumentException ex) {
+            return false;
+        }
+        return true;
+    }
+
+    private void checkCanGetBanknotesOut(int sum) {
+        throwExIfTrue(sum <= 0, "Нельзя использовать нулевое или отрицаиельное число");
+        throwExIfTrue(sum % cassettes.get(0).getBanknoteFaceValue() != 0, "Нет подходящего номинала");
+
+        Map<Cassette, Integer> cassettesToGetOut = getCassettesToGetOut(sum);
+        throwExIfTrue(cassettesToGetOut.entrySet()
+                        .stream()
+                        .mapToInt(entry -> entry.getKey().getBanknoteFaceValue() * entry.getValue())
+                        .sum() != sum,
+                "Нет нужного количества купюр");
+    }
+
 
     @Override
     public void execute(Command command) {
