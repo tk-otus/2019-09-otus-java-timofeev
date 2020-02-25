@@ -29,16 +29,8 @@ public class NonameBankATM implements ATM {
 
     @Override
     public void putBanknotesIn(Banknote banknote, int count) {
-        throwExIfTrue(count <= 0, "Нельзя использовать нулевое или отрицаиельное число");
-
+        checkCanPutBanknotesIn(banknote, count);
         List<Cassette> cassettes = getCassettesByBanknote(banknote);
-        throwExIfTrue(cassettes.isEmpty(), "Банкомат не принимает купюры данного номинала");
-
-        if (cassettesFreeSpaceSum(cassettes) < count) {
-            System.out.println("К сожалению мы не можем принять " + count + " купюр по " + banknote.getValue() + " руб.");
-            return;
-        }
-
         for (Cassette cassette : cassettes) {
             int banknotesToPut = Math.min(cassette.getFreeSpace(), count);
             cassette.execute(new PutBanknotesInCommand(cassette, banknotesToPut));
@@ -49,8 +41,23 @@ public class NonameBankATM implements ATM {
         }
     }
 
-    private int cassettesFreeSpaceSum(List<Cassette> cassettes) {
-        return cassettes.stream().mapToInt(Cassette::getFreeSpace).sum();
+    @Override
+    public boolean canPutBanknotesIn(Banknote banknote, int count) {
+        try {
+            checkCanPutBanknotesIn(banknote, count);
+        } catch (IllegalArgumentException ex) {
+            return false;
+        }
+        return true;
+    }
+
+    private void checkCanPutBanknotesIn(Banknote banknote, int count) {
+        List<Cassette> cassettes = getCassettesByBanknote(banknote);
+        int totalFreeSpace = cassettes.stream().mapToInt(Cassette::getFreeSpace).sum();
+
+        throwExIfTrue(count <= 0, "Нельзя использовать нулевое или отрицаиельное число");
+        throwExIfTrue(cassettes.isEmpty(), "Банкомат не принимает купюры данного номинала");
+        throwExIfTrue(totalFreeSpace < count, "В банкомате не хватает места");
     }
 
     private List<Cassette> getCassettesByBanknote(Banknote banknote) {

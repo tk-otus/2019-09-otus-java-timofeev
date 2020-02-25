@@ -33,7 +33,7 @@ public class ATMTest {
     @Test
     public void testCassettesSorting() {
         List<Integer> list1 = atm.getCassettes().stream().map(c -> c.getBanknote().getValue()).collect(Collectors.toList());
-        List<Integer> list2 = Arrays.stream(new int[] {200, 500, 1000, 5000, 5000}).boxed().collect(Collectors.toList());
+        List<Integer> list2 = Arrays.stream(new int[]{200, 500, 1000, 5000, 5000}).boxed().collect(Collectors.toList());
         assertEquals(list1, list2);
     }
 
@@ -135,6 +135,22 @@ public class ATMTest {
         });
         assertTrue(exception.getMessage().contains("Банкомат не принимает купюры данного номинала"));
     }
+
+    @Test
+    public void testCantPutCashWithZero() {
+        assertFalse(atm.canPutBanknotesIn(RUBanknote.RUB_5000, 0));
+    }
+
+    @Test
+    public void testCantPutCashWithNegative() {
+        assertFalse(atm.canPutBanknotesIn(RUBanknote.RUB_5000, -100));
+    }
+
+    @Test
+    public void testCantPutCashWithNoFaceValue() {
+        assertFalse(atm.canPutBanknotesIn(RUBanknote.RUB_50, 10));
+    }
+
     @Test
     public void testPutCashInTwoSameCassettes() {
         atm.putBanknotesIn(RUBanknote.RUB_5000, 100);
