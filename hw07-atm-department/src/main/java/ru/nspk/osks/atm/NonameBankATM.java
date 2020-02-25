@@ -76,6 +76,16 @@ public class NonameBankATM implements ATM {
         }
     }
 
+    @Override
+    public boolean canGetBanknotesOut(int sum) {
+        try {
+            checkCanGetBanknotesOut(sum);
+        } catch (IllegalArgumentException ex) {
+            return false;
+        }
+        return true;
+    }
+
     private Map<Cassette, Integer> getCassettesToGetOut(int sum) {
         int sumToLeft = sum;
         Map<Cassette, Integer> result = new HashMap<>();
@@ -103,16 +113,6 @@ public class NonameBankATM implements ATM {
         return result;
     }
 
-    @Override
-    public boolean canGetBanknotesOut(int sum) {
-        try {
-            checkCanGetBanknotesOut(sum);
-        } catch (IllegalArgumentException ex) {
-            return false;
-        }
-        return true;
-    }
-
     private void checkCanGetBanknotesOut(int sum) {
         throwExIfTrue(sum <= 0, "Нельзя использовать нулевое или отрицаиельное число");
         throwExIfTrue(sum % cassettes.get(0).getBanknoteFaceValue() != 0, "Нет подходящего номинала");
@@ -124,7 +124,6 @@ public class NonameBankATM implements ATM {
                         .sum() != sum,
                 "Нет нужного количества купюр");
     }
-
 
     @Override
     public void execute(Command command) {
