@@ -9,3 +9,6 @@
 1. [Homework #3: Сборщики мусора](hw03-gc)
 1. [Homework #4: Автоматическое логирование](hw4-automatic-logging)
 1. [Homework #5: Аннотации](hw05-testing-framework)
+1. [Homework #6: Эмулятор АТМ](hw06-atm)
+1. [Homework #7: Департамент ATM](hw07-atm-department)
+
