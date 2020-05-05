@@ -6,7 +6,7 @@ import java.util.zip.ZipOutputStream;
 
 public class IODemo {
     private static final String personFile = "person.bin";
-    private static final String resourcesPath = "src/main/resources/";
+    private static final String resourcesPath = "hw08-json-object-writer/src/main/resources/";
     private static final String textFile = "textFile.txt";
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
