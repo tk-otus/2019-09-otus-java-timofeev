@@ -44,19 +44,16 @@ public class GsonDemo {
     private static void gsonWithNonMatchingFieldNames() throws IOException {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(User.class, new UserDeserializerForGson());
-        User user = gsonBuilder.create().fromJson(readFile(jsonFile2).toString(), User.class);
-        System.out.println(user);
-    }
 
-    private static class UserDeserializerForGson implements JsonDeserializer<User> {
-        @Override
-        public User deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-            JsonObject jObject = jsonElement.getAsJsonObject();
-            String firstName = jObject.get("first_name").getAsString();
-            int age = jObject.get("age").getAsInt();
-            String streetAddress = jObject.get("street_address").getAsString();
-            return new User(firstName, age, streetAddress);
-        }
+        User user = gsonBuilder.create().fromJson(readFile(jsonFile2).toString(), User.class);
+        System.out.println("User from json file: " + user);
+
+        String json = gsonBuilder.create().toJson(user);
+        System.out.println("Json from user object: " + json);
+
+        gsonBuilder.registerTypeAdapter(User.class, new UserSerializerForGson());
+        json = gsonBuilder.create().toJson(user);
+        System.out.println("Json from user object with changed names: " + json);
     }
 
     private static String readFile(String file) throws IOException {
@@ -70,6 +67,30 @@ public class GsonDemo {
                 line = bufferedReader.readLine();
             }
             return json.toString();
+        }
+    }
+
+    private static class UserDeserializerForGson implements JsonDeserializer<User> {
+        @Override
+        public User deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+            JsonObject jObject = jsonElement.getAsJsonObject();
+            String firstName = jObject.get("first_name").getAsString();
+            int age = jObject.get("age").getAsInt();
+            String streetAddress = jObject.get("street_address").getAsString();
+            return new User(firstName, age, streetAddress);
+        }
+    }
+
+    private static class UserSerializerForGson implements JsonSerializer<User> {
+
+        @Override
+        public JsonElement serialize(User user, Type type, JsonSerializationContext jsonSerializationContext) {
+            final JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("age", user.getAge());
+            jsonObject.addProperty("first_name", user.getFirstName());
+            jsonObject.addProperty("street_address", user.getStreetAddress());
+            jsonObject.addProperty("some_info", user.getSomeInfo());
+            return jsonObject;
         }
     }
 }

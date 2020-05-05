@@ -14,6 +14,22 @@ public class User {
         this.streetAddress = streetAddress;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getStreetAddress() {
+        return streetAddress;
+    }
+
+    public String getSomeInfo() {
+        return "Some REST API info";
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
