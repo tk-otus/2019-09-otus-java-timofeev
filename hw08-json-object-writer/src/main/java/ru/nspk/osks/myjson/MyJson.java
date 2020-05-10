@@ -7,21 +7,51 @@ import javax.json.JsonValue;
 import java.lang.reflect.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Collection;
+import java.util.*;
 
 public class MyJson {
 
     public String toJson(Object obj) {
-        String result = "";
-        if (obj == null) {
-            result = JsonValue.NULL.toString();
-        } else if (obj.getClass().isArray()) {
-            result = this.arrayToJson(obj).toString();
-        } else {
-            result = this.objToJson(obj).toString();
-        }
+        return getJsonValue(obj).toString();
+    }
 
-        return result;
+    private JsonValue getJsonValue(Object obj) {
+        if (obj == null) return JsonValue.NULL;
+
+        Class<?> clazz = obj.getClass();
+        if (clazz.isArray()) {
+            if (Array.getLength(obj) == 0) {
+                return JsonValue.EMPTY_JSON_ARRAY;
+            }
+            return arrayToJson(obj);
+        }
+        if (obj instanceof String) {
+            return Json.createValue((String) obj);
+        } else if (obj instanceof Integer) {
+            return Json.createValue((Integer) obj);
+        } else if (obj instanceof Long) {
+            return Json.createValue((Long) obj);
+        } else if (obj instanceof Byte) {
+            return Json.createValue((Byte) obj);
+        } else if (obj instanceof Short) {
+            return Json.createValue((Short) obj);
+        } else if (obj instanceof Double) {
+            return Json.createValue((Double) obj);
+        } else if (obj instanceof Float) {
+            return Json.createValue((Float) obj);
+        } else if (obj instanceof BigDecimal) {
+            return Json.createValue((BigDecimal) obj);
+        } else if (obj instanceof BigInteger) {
+            return Json.createValue((BigInteger) obj);
+        } else if (obj instanceof Boolean) {
+            return (Boolean) obj ? JsonValue.TRUE : JsonValue.FALSE;
+        } else if (obj instanceof Collection) {
+            return arrayToJson(((Collection) obj).toArray());
+        } else if (obj instanceof Map) {
+            return mapToJson(obj);
+        } else {
+            return objToJson(obj);
+        }
     }
 
     private JsonValue arrayToJson(Object obj) {
@@ -52,40 +82,13 @@ public class MyJson {
         return objectBuilder.build();
     }
 
-    private JsonValue getJsonValue(Object obj) {
-        if (obj == null) return JsonValue.NULL;
-
-        Class<?> clazz = obj.getClass();
-        if (clazz.isArray()) {
-            if (Array.getLength(obj) == 0) {
-                return JsonValue.EMPTY_JSON_ARRAY;
-            }
-            return this.arrayToJson(obj);
+    private JsonValue mapToJson(Object obj) {
+        JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+        for (Object entry : ((Map) obj).entrySet()) {
+            String key = (String) ((Map.Entry) entry).getKey();
+            JsonValue value = getJsonValue(((Map.Entry) entry).getValue());
+            objectBuilder.add(key, value);
         }
-        if (obj instanceof String) {
-            return Json.createValue((String) obj);
-        } else if (obj instanceof Integer) {
-            return Json.createValue((Integer) obj);
-        } else if (obj instanceof Long) {
-            return Json.createValue((Long) obj);
-        } else if (obj instanceof Byte) {
-            return Json.createValue((Byte) obj);
-        } else if (obj instanceof Short) {
-            return Json.createValue((Short) obj);
-        } else if (obj instanceof Double) {
-            return Json.createValue((Double) obj);
-        } else if (obj instanceof Float) {
-            return Json.createValue((Float) obj);
-        } else if (obj instanceof BigDecimal) {
-            return Json.createValue((BigDecimal) obj);
-        } else if (obj instanceof BigInteger) {
-            return Json.createValue((BigInteger) obj);
-        } else if (obj instanceof Boolean) {
-            return (Boolean) obj ? JsonValue.TRUE : JsonValue.FALSE;
-        } else if (obj instanceof Collection) {
-            return this.arrayToJson(((Collection) obj).toArray());
-        } else {
-            return this.objToJson(obj);
-        }
+        return objectBuilder.build();
     }
 }
