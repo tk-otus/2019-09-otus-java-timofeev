@@ -2,6 +2,10 @@ package ru.nspk.osks.myjson;
 
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
+import ru.nspk.osks.myjson.classes.Address;
+import ru.nspk.osks.myjson.classes.PhoneNumber;
+import ru.nspk.osks.myjson.classes.SimpleClass;
+import ru.nspk.osks.myjson.classes.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;

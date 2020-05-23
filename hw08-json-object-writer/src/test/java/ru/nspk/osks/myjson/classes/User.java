@@ -1,4 +1,4 @@
-package ru.nspk.osks.myjson;
+package ru.nspk.osks.myjson.classes;
 
 import java.util.ArrayList;
 import java.util.List;

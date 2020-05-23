@@ -1,4 +1,4 @@
-package ru.nspk.osks.myjson;
+package ru.nspk.osks.myjson.classes;
 
 public class PhoneNumber {
     private String name;

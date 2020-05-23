@@ -1,4 +1,4 @@
-package ru.nspk.osks.myjson;
+package ru.nspk.osks.myjson.classes;
 
 public class Address {
     private String description;
