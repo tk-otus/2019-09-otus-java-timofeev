@@ -11,4 +11,5 @@
 1. [Homework #5: Аннотации](hw05-testing-framework)
 1. [Homework #6: Эмулятор АТМ](hw06-atm)
 1. [Homework #7: Департамент ATM](hw07-atm-department)
+1. [Homework #9: Собственный ORM](hw09-simple-orm)
 

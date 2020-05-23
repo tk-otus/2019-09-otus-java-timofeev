@@ -22,6 +22,7 @@
         <module>hw05-testing-framework</module>
         <module>hw06-atm</module>
         <module>hw07-atm-department</module>
+        <module>hw09-simple-orm</module>
     </modules>
 
     <properties>
