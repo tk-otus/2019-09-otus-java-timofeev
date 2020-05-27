@@ -21,6 +21,7 @@
         <module>hw04-automatic-logging</module>
         <module>hw05-testing-framework</module>
         <module>hw06-atm</module>
+        <module>hw07-atm-department</module>
         <module>hw08-json-object-writer</module>
     </modules>
 
