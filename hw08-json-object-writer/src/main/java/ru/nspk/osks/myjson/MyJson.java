@@ -27,6 +27,8 @@ public class MyJson {
         }
         if (obj instanceof String) {
             return Json.createValue((String) obj);
+        } else if (obj instanceof Character) {
+            return Json.createValue((Character) obj);
         } else if (obj instanceof Integer) {
             return Json.createValue((Integer) obj);
         } else if (obj instanceof Long) {
