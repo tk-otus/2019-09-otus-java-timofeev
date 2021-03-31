@@ -34,7 +34,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!--endregion-->
-        <com.google.guava.version>28.1-jre</com.google.guava.version>
+        <com.google.guava.version>29.0-jre</com.google.guava.version>
         <org.junit.jupiter.version>5.5.2</org.junit.jupiter.version>
         <org.apache.maven.plugins.assebly.version>3.1.1</org.apache.maven.plugins.assebly.version>
     </properties>
